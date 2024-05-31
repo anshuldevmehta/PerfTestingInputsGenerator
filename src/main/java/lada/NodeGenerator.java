@@ -27,7 +27,7 @@ import java.util.Map;
 
                 // Populate the map with unique key-value pairs
                 for (int nodeId = 1; nodeId <= 32000; nodeId++) {
-                    String interimNodeId=DEVICE_ID_BASE_VALUE+String.format("%05d", nodeId).trim();
+                    String interimNodeId=doNodeIdDrama(nodeId);
                     keyValuePairs.put(interimNodeId,doMeshNetworkDrama(String.valueOf(nodeId),interimNodeId));
                     //keyValuePairs.put(String.valueOf(nodeId),doNodeIdDrama(nodeId));
                 }
