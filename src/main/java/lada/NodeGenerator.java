@@ -2,7 +2,6 @@ package lada;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lada.NodeEvent;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
@@ -25,11 +24,13 @@ import java.util.Map;
             try (BufferedWriter writer = new BufferedWriter(new FileWriter("MeshNetworks.csv"))) {
                 Map<String, String> keyValuePairs = new HashMap<>();
 
+                int previousNodeId=0;
                 // Populate the map with unique key-value pairs
                 for (int nodeId = 1; nodeId <= 32000; nodeId++) {
+                    if(0==previousNodeId || nodeId % 25 ==0)
+                    previousNodeId=nodeId;
                     String interimNodeId=doNodeIdDrama(nodeId);
-                    keyValuePairs.put(interimNodeId,doMeshNetworkDrama(String.valueOf(nodeId),interimNodeId));
-                    //keyValuePairs.put(String.valueOf(nodeId),doNodeIdDrama(nodeId));
+                    keyValuePairs.put(interimNodeId,doMeshNetworkDrama(String.valueOf(previousNodeId),interimNodeId));
                 }
 
                 // Write the key-value pairs to the CSV file
@@ -51,9 +52,7 @@ import java.util.Map;
 
                 // Populate the map with unique key-value pairs
                 for (int nodeId = 1; nodeId <= 32000; nodeId++) {
-                    // keyValuePairs.put(nodeId, String.valueOf((char) ('A' + nodeId % 26)));
                     keyValuePairs.put(DEVICE_ID_BASE_VALUE+String.format("%05d", nodeId).trim(),doNodeIdDrama(nodeId));
-                    //keyValuePairs.put(String.valueOf(nodeId),doNodeIdDrama(nodeId));
                 }
 
                 // Write the key-value pairs to the CSV file
@@ -103,7 +102,6 @@ import java.util.Map;
             nodeEvent.setMeshNetworkPrefix(sb.toString().trim());
             ObjectMapper mapper=new ObjectMapper();
             String nodeEventJson=mapper.writeValueAsString(nodeEvent);
-            //String nodeEventJson = mapper.writeValueAsString(nodeEvent);
             return nodeEventJson;
 
         }
